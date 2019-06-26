@@ -1,6 +1,7 @@
 ﻿using AForge.Imaging.Filters;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 
 namespace aforgeTest
 {
@@ -17,24 +18,23 @@ namespace aforgeTest
             Bitmap bitmapImage = sISThreshold.Apply(grayImage);
 
             Bitmap pattern = new Bitmap(@"C:\Users\Slava\Downloads\Pattern.png");
-            short[,] patternArray = new short[pattern.Width, pattern.Height];
-
-            for (int i = 0; i < pattern.Height; i++)
+            //you should use the ToArgb method to compare two Colors
+            
+            for (int x = 0; x < bitmapImage.Width; x++)
             {
-                for (int j = 0; j < pattern.Width; j++)
+                for (int y = 0; y < bitmapImage.Height; y++)
                 {
-                    int sum = pattern.GetPixel(j, i).R + pattern.GetPixel(j, i).G + pattern.GetPixel(j, i).B + pattern.GetPixel(j, i).A;
-                    if(sum > 900)
+                    Color c = bitmapImage.GetPixel(x, y);
+                    int r = c.ToArgb();
+                    //int x = 30;
+                    //if (Enumerable.Range(1, 100).Contains(x))
+                    //    //true
+
+                    //if (x >= 1 && x <= 100)
+                    //        //true
+                    if (r != -1)
                     {
-                        patternArray[j, i] = 1;
-                    }
-                    else if(sum < 150)
-                    {
-                        patternArray[j, i] = 0;
-                    }
-                    else
-                    {
-                        patternArray[j, i] = -1;
+                        System.Console.WriteLine(x);
                     }
                 }
             }
@@ -46,10 +46,10 @@ namespace aforgeTest
             //}
             //result.Save(@"C:\Users\Slava\Downloads\PatternFromArray.jpg");
 
-            HitAndMiss hFilter = new HitAndMiss(patternArray, HitAndMiss.Modes.HitAndMiss);
-            image = hFilter.Apply(image);
+            //HitAndMiss hFilter = new HitAndMiss(patternArray, HitAndMiss.Modes.HitAndMiss);
+            //image = hFilter.Apply(image);
 
-            image.Save(@"C:\Users\Slava\Downloads\Arm2.jpg");
+            //image.Save(@"C:\Users\Slava\Downloads\Arm2.jpg");
         }
 
         //public static byte[] ImageToByte2(Image img)
