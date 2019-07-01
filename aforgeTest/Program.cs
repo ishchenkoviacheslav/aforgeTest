@@ -23,16 +23,29 @@ namespace aforgeTest
             int currentAssesment = 0;
             int bestAssesment = 0;
 
-            int widthShift = bitmapImage.Width - pattern.Width;
-            int heightShift = bitmapImage.Height - pattern.Height;
+            int increaseByWidth = bitmapImage.Width - pattern.Width;
+            int increaseByHeight = bitmapImage.Height - pattern.Height;
 
+            int currentX = 0;
+            int currentY = 0;
 
+            //for
+            
+            if(currentX >= increaseByWidth)
+            {
+                currentX = increaseByWidth;
+            }
+
+            if (currentY >= increaseByHeight)
+            {
+                currentY = increaseByHeight;
+            }
 
             for (int x = 0; x < pattern.Width; x++)
             {
                 for (int y = 0; y < pattern.Height; y++)
                 {
-                    int bitmapPixel = bitmapImage.GetPixel(x, y).ToArgb();
+                    int bitmapPixel = bitmapImage.GetPixel(x + currentX, y + currentY).ToArgb();
                     int patternPixel = pattern.GetPixel(x, y).ToArgb();
                     
                     if(bitmapPixel == patternPixel)
@@ -51,7 +64,8 @@ namespace aforgeTest
             {
                 bestAssesment = currentAssesment;
             }
-
+            currentX++;
+            currentY++;
             //Bitmap result;
             //using (var ms = new MemoryStream(patternArray))
             //{
