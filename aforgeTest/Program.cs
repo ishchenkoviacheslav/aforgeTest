@@ -19,24 +19,37 @@ namespace aforgeTest
 
             Bitmap pattern = new Bitmap(@"C:\Users\Slava\Downloads\Pattern.png");
             //you should use the ToArgb method to compare two Colors
-            
-            for (int x = 0; x < bitmapImage.Width; x++)
-            {
-                for (int y = 0; y < bitmapImage.Height; y++)
-                {
-                    Color c = bitmapImage.GetPixel(x, y);
-                    int r = c.ToArgb();
-                    //int x = 30;
-                    //if (Enumerable.Range(1, 100).Contains(x))
-                    //    //true
+            int totalAssesment = pattern.Width * pattern.Height;
+            int currentAssesment = 0;
+            int bestAssesment = 0;
 
-                    //if (x >= 1 && x <= 100)
-                    //        //true
-                    if (r != -1)
+            int widthShift = bitmapImage.Width - pattern.Width;
+            int heightShift = bitmapImage.Height - pattern.Height;
+
+
+
+            for (int x = 0; x < pattern.Width; x++)
+            {
+                for (int y = 0; y < pattern.Height; y++)
+                {
+                    int bitmapPixel = bitmapImage.GetPixel(x, y).ToArgb();
+                    int patternPixel = pattern.GetPixel(x, y).ToArgb();
+                    
+                    if(bitmapPixel == patternPixel)
                     {
-                        System.Console.WriteLine(x);
+                        currentAssesment++;
                     }
+                    //only this values
+                    //if (r != -1 && r != -16777216)
+                    //{
+                    //    System.Console.WriteLine(x);
+                    //}
                 }
+            }
+
+            if(bestAssesment < currentAssesment)
+            {
+                bestAssesment = currentAssesment;
             }
 
             //Bitmap result;
