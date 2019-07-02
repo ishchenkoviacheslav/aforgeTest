@@ -19,7 +19,6 @@ namespace aforgeTest
 
             Bitmap pattern = new Bitmap(@"C:\Users\Slava\Downloads\Pattern.png");
             //you should use the ToArgb method to compare two Colors
-            int totalAssesment = pattern.Width * pattern.Height;
             int currentAssesment = 0;
             int bestAssesment = 0;
             int bestStartX = 0;
@@ -28,9 +27,9 @@ namespace aforgeTest
             int increaseByWidth = bitmapImage.Width - pattern.Width;
             int increaseByHeight = bitmapImage.Height - pattern.Height;
 
-            for (int startX = 0; startX < increaseByWidth; startX++)
+            for (int startX = 0; startX < increaseByWidth; startX+=10)
             {
-                for (int startY = 0; startY < increaseByHeight; startY++)
+                for (int startY = 0; startY < increaseByHeight; startY+=10)
                 {
                     for (int w = 0; w < pattern.Width; w++)
                     {
@@ -57,8 +56,9 @@ namespace aforgeTest
                         bestStartX = startX;
                         bestStartY = startY;
                     }
+                    currentAssesment = 0;
                 }
-                System.Console.Write(".");
+                System.Console.Write($"{startX}");
             }
 
             System.Console.WriteLine($"done. best assesmet: {bestAssesment}, X: {bestStartX}, Y: {bestStartY}");
