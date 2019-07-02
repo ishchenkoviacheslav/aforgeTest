@@ -22,50 +22,47 @@ namespace aforgeTest
             int totalAssesment = pattern.Width * pattern.Height;
             int currentAssesment = 0;
             int bestAssesment = 0;
+            int bestStartX = 0;
+            int bestStartY = 0;
 
             int increaseByWidth = bitmapImage.Width - pattern.Width;
             int increaseByHeight = bitmapImage.Height - pattern.Height;
 
-            int currentX = 0;
-            int currentY = 0;
-
-            //for
-            
-            if(currentX >= increaseByWidth)
+            for (int startX = 0; startX < increaseByWidth; startX++)
             {
-                currentX = increaseByWidth;
-            }
-
-            if (currentY >= increaseByHeight)
-            {
-                currentY = increaseByHeight;
-            }
-
-            for (int x = 0; x < pattern.Width; x++)
-            {
-                for (int y = 0; y < pattern.Height; y++)
+                for (int startY = 0; startY < increaseByHeight; startY++)
                 {
-                    int bitmapPixel = bitmapImage.GetPixel(x + currentX, y + currentY).ToArgb();
-                    int patternPixel = pattern.GetPixel(x, y).ToArgb();
-                    
-                    if(bitmapPixel == patternPixel)
+                    for (int w = 0; w < pattern.Width; w++)
                     {
-                        currentAssesment++;
+                        for (int h = 0; h < pattern.Height; h++)
+                        {
+                            int bitmapPixel = bitmapImage.GetPixel(w + startX, h + startY).ToArgb();
+                            int patternPixel = pattern.GetPixel(w, h).ToArgb();
+
+                            if (bitmapPixel == patternPixel)
+                            {
+                                currentAssesment++;
+                            }
+                            //only this values
+                            //if (r != -1 && r != -16777216)
+                            //{
+                            //    System.Console.WriteLine(x);
+                            //}
+                        }
                     }
-                    //only this values
-                    //if (r != -1 && r != -16777216)
-                    //{
-                    //    System.Console.WriteLine(x);
-                    //}
+
+                    if (bestAssesment < currentAssesment)
+                    {
+                        bestAssesment = currentAssesment;
+                        bestStartX = startX;
+                        bestStartY = startY;
+                    }
                 }
+                System.Console.Write(".");
             }
 
-            if(bestAssesment < currentAssesment)
-            {
-                bestAssesment = currentAssesment;
-            }
-            currentX++;
-            currentY++;
+            System.Console.WriteLine($"done. best assesmet: {bestAssesment}, X: {bestStartX}, Y: {bestStartY}");
+
             //Bitmap result;
             //using (var ms = new MemoryStream(patternArray))
             //{
