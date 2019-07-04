@@ -9,7 +9,7 @@ namespace aforgeTest
     {
         private static void Main(string[] args)
         {
-            Bitmap image = (Bitmap)Bitmap.FromFile(@"C:\Users\Slava\Downloads\tools.jpg");
+            Bitmap image = (Bitmap)Bitmap.FromFile(@"C:\Users\Slava\Downloads\garage2.jpg");
             // create grayscale filter (BT709)
             Grayscale grayscale = new Grayscale(0.2125, 0.7154, 0.0721);
             SISThreshold sISThreshold = new SISThreshold();
@@ -17,13 +17,14 @@ namespace aforgeTest
             Bitmap grayImage = grayscale.Apply(image);
             Bitmap bitmapImage = sISThreshold.Apply(grayImage);
 
-            Bitmap pattern = new Bitmap(@"C:\Users\Slava\Downloads\toolsPattern.png");
+            Bitmap pattern = new Bitmap(@"C:\Users\Slava\Downloads\garagePattern.png");
             //you should use the ToArgb method to compare two Colors
             int currentAssesment = 0;
             int bestAssesment = 0;
             int bestStartX = 0;
             int bestStartY = 0;
             int inc = 10;
+            //move pattern square inside image squate
             for (int i = 0; i < 2; i++)
             {
                 int borderByWidth = bitmapImage.Width - pattern.Width;
@@ -36,9 +37,9 @@ namespace aforgeTest
                     borderByHeight = (bestStartY + 10) > borderByHeight ? borderByHeight : (bestStartY + 10);
                 }
 
-                for (int startX = (i == 0) ? 0 : (bestStartX - 10); startX < borderByWidth; startX+=inc)
+                for (int startX = (i == 0) ? 0 : ((bestStartX - 10) < 0 ? 0 : (bestStartX - 10)); startX < borderByWidth; startX+=inc)
                 {
-                    for (int startY = (i == 0) ? 0 : (bestStartY - 10); startY < borderByHeight; startY+=inc)
+                    for (int startY = (i == 0) ? 0 : ((bestStartY - 10) < 0 ? 0 : (bestStartY - 10)); startY < borderByHeight; startY+=inc)
                     {
                         for (int w = 0; w < pattern.Width; w++)
                         {
