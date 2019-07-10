@@ -9,7 +9,7 @@ namespace aforgeTest
     {
         private static void Main(string[] args)
         {
-            Bitmap image = (Bitmap)Bitmap.FromFile(@"C:\Users\Slava\Downloads\garage2.jpg");
+            Bitmap image = (Bitmap)Bitmap.FromFile(@"C:\Users\Slava\Downloads\garage1.jpg");
             // create grayscale filter (BT709)
             Grayscale grayscale = new Grayscale(0.2125, 0.7154, 0.0721);
             SISThreshold sISThreshold = new SISThreshold();
