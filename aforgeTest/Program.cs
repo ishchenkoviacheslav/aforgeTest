@@ -43,6 +43,7 @@ namespace aforgeTest
                     }
                 }
             }
+
             int maxX = coordinates.Max(s => s.X);
             int maxY = coordinates.Max(s => s.Y);
 
@@ -53,34 +54,39 @@ namespace aforgeTest
             int bestStartY = 0;
             int borderByWidth = bitmapImage.Width - maxX;
             int borderByHeight = bitmapImage.Height - maxY;
-
-            //no restriction if pattern largest than source bitmap
-            for (int posX = 0; posX < borderByWidth; posX++)
+            float[] multiple = new float[] { 0.8f, 0.9f, 1f, 1.1f, 1.2f, 1.3f };
+            for (int repeat = 0; repeat < 7; repeat++)
             {
-                for (int posY = 0; posY < borderByHeight; posY++)
+                //no check if pattern largest than source bitmap
+                for (int posX = repeat != 6 ? 0 : bestStartX; posX < borderByWidth; posX += repeat != 6 ? 10 : 1)
                 {
-                    for (int start = 0; start < coordinates.Count; start++)
+                    for (int posY = repeat != 6 ? 0 : bestStartY; posY < borderByHeight; posY += repeat != 6 ? 10 : 1)
                     {
-                        int currentPixel = bitmapImage.GetPixel(posX + coordinates[start].X, posY + coordinates[0].Y).ToArgb();
-
-                        if (currentPixel == -16777216)
+                        for (int start = 0; start < coordinates.Count; start++)
                         {
-                            currentAssesment++;
-                        }
-                    }
+                            int currX = posX + (int)(coordinates[start].X * multiple[repeat]);
+                            int currY = posY + (int)(coordinates[0].Y * multiple[repeat]);
+                            int currentPixel = bitmapImage.GetPixel(currX > borderByWidth ? borderByWidth : currX, currY > borderByHeight ? borderByHeight : currY).ToArgb();
 
-                    //-1 - white; -16777216 - black
-                    if (bestAssesment < currentAssesment)
-                    {
-                        bestAssesment = currentAssesment;
-                        bestStartX = posX;
-                        bestStartY = posY;
+                            if (currentPixel == -1)
+                            {
+                                currentAssesment++;
+                            }
+                        }
+
+                        //-1 - white; -16777216 - black
+                        if (bestAssesment < currentAssesment)
+                        {
+                            bestAssesment = currentAssesment;
+                            bestStartX = posX;
+                            bestStartY = posY;
+                        }
+                        currentAssesment = 0;
                     }
-                    currentAssesment = 0;
+                    System.Console.Write($"{posX}");
                 }
-                System.Console.Write($"{posX}");
+                System.Console.WriteLine($"done. best assesmet: {bestAssesment}, X: {bestStartX}, Y: {bestStartY}");
             }
-            System.Console.WriteLine($"done. best assesmet: {bestAssesment}, X: {bestStartX}, Y: {bestStartY}");
         }
     }
 }
