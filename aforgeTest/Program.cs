@@ -1,10 +1,22 @@
 ﻿using AForge.Imaging.Filters;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 
 namespace aforgeTest
 {
+    class XY
+    {
+        public XY(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public int X { get; set; }
+        public int Y { get; set; }
+    }
     internal class Program
     {
         private static void Main(string[] args)
@@ -18,60 +30,57 @@ namespace aforgeTest
             Bitmap bitmapImage = sISThreshold.Apply(grayImage);
 
             Bitmap pattern = new Bitmap(@"C:\Users\Slava\Downloads\garagePattern.png");
+
+            List<XY> coordinates = new List<XY>();
+
+            for (int pX = 0; pX < pattern.Width; pX++)
+            {
+                for (int pY = 0; pY < pattern.Height; pY++)
+                {
+                    if (pattern.GetPixel(pX, pY).ToArgb() == -1)
+                    {
+                        coordinates.Add(new XY(pX, pY));
+                    }
+                }
+            }
+            int maxX = coordinates.Max(s => s.X);
+            int maxY = coordinates.Max(s => s.Y);
+
             //you should use the ToArgb method to compare two Colors
             int currentAssesment = 0;
             int bestAssesment = 0;
             int bestStartX = 0;
             int bestStartY = 0;
-            int inc = 10;
-            //move pattern square inside image squate
-            for (int i = 0; i < 2; i++)
+            int borderByWidth = bitmapImage.Width - maxX;
+            int borderByHeight = bitmapImage.Height - maxY;
+
+            //no restriction if pattern largest than source bitmap
+            for (int posX = 0; posX < borderByWidth; posX++)
             {
-                int borderByWidth = bitmapImage.Width - pattern.Width;
-                int borderByHeight = bitmapImage.Height - pattern.Height;
-
-                if (i == 1)
+                for (int posY = 0; posY < borderByHeight; posY++)
                 {
-                    inc = 1;
-                    borderByWidth = (bestStartX + 10) > borderByWidth ? borderByWidth : (bestStartX + 10);
-                    borderByHeight = (bestStartY + 10) > borderByHeight ? borderByHeight : (bestStartY + 10);
-                }
-
-                for (int startX = (i == 0) ? 0 : ((bestStartX - 10) < 0 ? 0 : (bestStartX - 10)); startX < borderByWidth; startX+=inc)
-                {
-                    for (int startY = (i == 0) ? 0 : ((bestStartY - 10) < 0 ? 0 : (bestStartY - 10)); startY < borderByHeight; startY+=inc)
+                    for (int start = 0; start < coordinates.Count; start++)
                     {
-                        for (int w = 0; w < pattern.Width; w++)
-                        {
-                            for (int h = 0; h < pattern.Height; h++)
-                            {
-                                int bitmapPixel = bitmapImage.GetPixel(w + startX, h + startY).ToArgb();
-                                int patternPixel = pattern.GetPixel(w, h).ToArgb();
+                        int currentPixel = bitmapImage.GetPixel(posX + coordinates[start].X, posY + coordinates[0].Y).ToArgb();
 
-                                if (bitmapPixel == patternPixel)
-                                {
-                                    currentAssesment++;
-                                }
-                                //only this values
-                                //if (r != -1 && r != -16777216)
-                                //{
-                                //    System.Console.WriteLine(x);
-                                //}
-                            }
-                        }
-
-                        if (bestAssesment < currentAssesment)
+                        if (currentPixel == -16777216)
                         {
-                            bestAssesment = currentAssesment;
-                            bestStartX = startX;
-                            bestStartY = startY;
+                            currentAssesment++;
                         }
-                        currentAssesment = 0;
                     }
-                    System.Console.Write($"{startX}");
+
+                    //-1 - white; -16777216 - black
+                    if (bestAssesment < currentAssesment)
+                    {
+                        bestAssesment = currentAssesment;
+                        bestStartX = posX;
+                        bestStartY = posY;
+                    }
+                    currentAssesment = 0;
                 }
-                System.Console.WriteLine($"done. best assesmet: {bestAssesment}, X: {bestStartX}, Y: {bestStartY}");
+                System.Console.Write($"{posX}");
             }
+            System.Console.WriteLine($"done. best assesmet: {bestAssesment}, X: {bestStartX}, Y: {bestStartY}");
         }
     }
 }
