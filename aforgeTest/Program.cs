@@ -42,14 +42,19 @@ namespace aforgeTest
                 }
             }
             float[] sizes = new float[] { 0.5f, 0.75f, 1f, 1.25f, 1.5f };
-            List<int[,]> patterns = new List<int[,]>();
+            int[,] size05 = new int[(int)(originalPattern.GetLength(0) * sizes[0]),(int)(originalPattern.GetLength(1) * sizes[0])];
+            int[,] size075 = new int[(int)(originalPattern.GetLength(0) * sizes[1]),(int)(originalPattern.GetLength(1) * sizes[1])];
+            int[,] size1 = new int[(int)(originalPattern.GetLength(0) * sizes[2]),(int)(originalPattern.GetLength(1) * sizes[2])];
+            int[,] size125 = new int[(int)(originalPattern.GetLength(0) * sizes[3]),(int)(originalPattern.GetLength(1) * sizes[3])];
+            int[,] size15 = new int[(int)(originalPattern.GetLength(0) * sizes[4]),(int)(originalPattern.GetLength(1) * sizes[4])];
             for (int i = 0; i < sizes.Length; i++)
             {
-                //horizontal encrease
+                //increase
                 for (int w = 0; w < originalPattern.GetLength(0); w++)
                 {
                     for (int h = 0; h < originalPattern.GetLength(1); h++)
                     {
+                        int firstPixel = originalPattern[w, h];
 
                     }
                 }
