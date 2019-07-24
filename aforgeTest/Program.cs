@@ -1,4 +1,5 @@
 ﻿using AForge.Imaging.Filters;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -7,9 +8,15 @@ namespace aforgeTest
 {
     internal class Program
     {
+        class Pixel
+        {
+            public int X { get; set; }
+            public int Y { get; set; }
+            public int Argb { get; set; }
+        }
         private static void Main(string[] args)
         {
-            Bitmap image = (Bitmap)Bitmap.FromFile(@"C:\Users\Slava\Downloads\garage2.jpg");
+            Bitmap image = (Bitmap)Bitmap.FromFile(@"C:\Users\Slava\Downloads\garage1.jpg");
             // create grayscale filter (BT709)
             Grayscale grayscale = new Grayscale(0.2125, 0.7154, 0.0721);
             SISThreshold sISThreshold = new SISThreshold();
@@ -24,7 +31,30 @@ namespace aforgeTest
             int bestStartX = 0;
             int bestStartY = 0;
             int inc = 10;
-            //move pattern square inside image squate
+            //prepare pattern bitmap
+            //get and save different sizes
+            int[,] originalPattern = new int[pattern.Width, pattern.Height];
+            for (int w = 0; w < pattern.Width; w++)
+            {
+                for (int h = 0; h < pattern.Height; h++)
+                {
+                    originalPattern[w,h] = pattern.GetPixel(w, h).ToArgb();
+                }
+            }
+            float[] sizes = new float[] { 0.5f, 0.75f, 1f, 1.25f, 1.5f };
+            List<int[,]> patterns = new List<int[,]>();
+            for (int i = 0; i < sizes.Length; i++)
+            {
+                //horizontal encrease
+                for (int w = 0; w < originalPattern.GetLength(0); w++)
+                {
+                    for (int h = 0; h < originalPattern.GetLength(1); h++)
+                    {
+
+                    }
+                }
+            }
+            //move pattern square inside image square
             for (int i = 0; i < 2; i++)
             {
                 int borderByWidth = bitmapImage.Width - pattern.Width;
