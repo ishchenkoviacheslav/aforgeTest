@@ -47,15 +47,33 @@ namespace aforgeTest
             int[,] size1 = new int[(int)(originalPattern.GetLength(0) * sizes[2]),(int)(originalPattern.GetLength(1) * sizes[2])];
             int[,] size125 = new int[(int)(originalPattern.GetLength(0) * sizes[3]),(int)(originalPattern.GetLength(1) * sizes[3])];
             int[,] size15 = new int[(int)(originalPattern.GetLength(0) * sizes[4]),(int)(originalPattern.GetLength(1) * sizes[4])];
+            List<int[,]> allSizes = new List<int[,]>() { size05, size075, size1, size125, size15 };
             for (int i = 0; i < sizes.Length; i++)
             {
+                bool firstIteration = true;
+                int firstPixel = 0;
+                int firstX = 0;
+                int firstY = 0;
                 //increase
                 for (int w = 0; w < originalPattern.GetLength(0); w++)
                 {
                     for (int h = 0; h < originalPattern.GetLength(1); h++)
                     {
-                        int firstPixel = originalPattern[w, h];
+                        allSizes[i][w, h] = originalPattern[w, h];
 
+                        if (firstIteration == true)
+                        {
+                            firstPixel = originalPattern[w, h];
+                            firstX = w;
+                            firstY = h;
+                        }
+                        else//only from second interation
+                        {
+                            if(firstPixel != originalPattern[w,h])
+                            {
+
+                            }
+                        }
                     }
                 }
             }
