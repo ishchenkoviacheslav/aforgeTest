@@ -6,14 +6,14 @@ using System.Linq;
 
 namespace aforgeTest
 {
+    internal class NextPoint
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int ColorOfPixel { get; set; }
+    }
     internal class Program
     {
-        class Pixel
-        {
-            public int X { get; set; }
-            public int Y { get; set; }
-            public int Argb { get; set; }
-        }
         private static void Main(string[] args)
         {
             Bitmap image = (Bitmap)Bitmap.FromFile(@"C:\Users\Slava\Downloads\garage1.jpg");
@@ -48,33 +48,42 @@ namespace aforgeTest
             int[,] size125 = new int[(int)(originalPattern.GetLength(0) * sizes[3]),(int)(originalPattern.GetLength(1) * sizes[3])];
             int[,] size15 = new int[(int)(originalPattern.GetLength(0) * sizes[4]),(int)(originalPattern.GetLength(1) * sizes[4])];
             List<int[,]> allSizes = new List<int[,]>() { size05, size075, size1, size125, size15 };
+            List<NextPoint> allPoints = new List<NextPoint>();
             for (int i = 0; i < sizes.Length; i++)
             {
                 bool firstIteration = true;
                 int firstPixel = 0;
                 int firstX = 0;
                 int firstY = 0;
+                //int countOfSamePixel = 0;
                 //increase
                 for (int w = 0; w < originalPattern.GetLength(0); w++)
                 {
                     for (int h = 0; h < originalPattern.GetLength(1); h++)
                     {
-                        allSizes[i][w, h] = originalPattern[w, h];
-
+                        //считываем одну линию (вертикаль) - высчитываем проценты сколько % черный и белый.
+                        //нужно сделать тоже и для горизонтали
                         if (firstIteration == true)
                         {
+                            firstIteration = false;
                             firstPixel = originalPattern[w, h];
+                            allPoints.Add(new NextPoint() { ColorOfPixel = firstPixel, X = w, Y = h });
                             firstX = w;
                             firstY = h;
+                            //countOfSamePixel++;
                         }
                         else//only from second interation
                         {
+                            //countOfSamePixel++;
                             if(firstPixel != originalPattern[w,h])
                             {
-
+                                //countOfSamePixel = 0;
+                                allPoints.Add(new NextPoint() { ColorOfPixel = firstPixel, X = w, Y = h });
+                                firstPixel = originalPattern[w, h];
                             }
                         }
                     }
+                    allSizes[i][w, h] =
                 }
             }
             //move pattern square inside image square
@@ -126,5 +135,5 @@ namespace aforgeTest
                 System.Console.WriteLine($"done. best assesmet: {bestAssesment}, X: {bestStartX}, Y: {bestStartY}");
             }
         }
-    }
+    }  
 }
