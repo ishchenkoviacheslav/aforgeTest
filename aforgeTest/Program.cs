@@ -55,7 +55,8 @@ namespace aforgeTest
                 int firstPixel = 0;
                 int firstX = 0;
                 int firstY = 0;
-                //int countOfSamePixel = 0;
+
+                bool fromBegin = true;
                 //increase
                 for (int w = 0; w < originalPattern.GetLength(0); w++)
                 {
@@ -70,20 +71,25 @@ namespace aforgeTest
                             allPoints.Add(new NextPoint() { ColorOfPixel = firstPixel, X = w, Y = h });
                             firstX = w;
                             firstY = h;
-                            //countOfSamePixel++;
                         }
                         else//only from second interation
                         {
-                            //countOfSamePixel++;
                             if(firstPixel != originalPattern[w,h])
                             {
-                                //countOfSamePixel = 0;
                                 allPoints.Add(new NextPoint() { ColorOfPixel = firstPixel, X = w, Y = h });
                                 firstPixel = originalPattern[w, h];
                             }
                         }
                     }
-                    allSizes[i][w, h] =
+                    for (int h = 0; h < originalPattern.GetLength(1); h++)
+                    {
+                        //заполнить allSizes теми же пикселями что и в allPoints, но только в пропорциях (для allSizes[i])
+                        if (fromBegin == true)
+                        {
+                            allSizes[i][w, h] = allPoints.First().ColorOfPixel;
+
+                        }
+                    }
                 }
             }
             //move pattern square inside image square
