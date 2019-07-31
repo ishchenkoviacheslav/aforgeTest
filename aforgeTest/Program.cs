@@ -1,4 +1,5 @@
 ﻿using AForge.Imaging.Filters;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -8,8 +9,7 @@ namespace aforgeTest
 {
     internal class NextPoint
     {
-        public int X { get; set; }
-        public int Y { get; set; }
+        public int Counter { get; set; }
         public int ColorOfPixel { get; set; }
     }
     internal class Program
@@ -48,13 +48,12 @@ namespace aforgeTest
             int[,] size125 = new int[(int)(originalPattern.GetLength(0) * sizes[3]),(int)(originalPattern.GetLength(1) * sizes[3])];
             int[,] size15 = new int[(int)(originalPattern.GetLength(0) * sizes[4]),(int)(originalPattern.GetLength(1) * sizes[4])];
             List<int[,]> allSizes = new List<int[,]>() { size05, size075, size1, size125, size15 };
-            List<NextPoint> allPoints = new List<NextPoint>();
+            Queue<NextPoint> allPoints = new Queue<NextPoint>();
             for (int i = 0; i < sizes.Length; i++)
             {
                 bool firstIteration = true;
-                int firstPixel = 0;
-                int firstX = 0;
-                int firstY = 0;
+                int nextPixel = 0;
+                int counter = 0;
 
                 bool fromBegin = true;
                 //increase
@@ -67,28 +66,43 @@ namespace aforgeTest
                         if (firstIteration == true)
                         {
                             firstIteration = false;
-                            firstPixel = originalPattern[w, h];
-                            allPoints.Add(new NextPoint() { ColorOfPixel = firstPixel, X = w, Y = h });
-                            firstX = w;
-                            firstY = h;
+                            nextPixel = originalPattern[w, h];
+                            //allPoints.Enqueue(new NextPoint() { ColorOfPixel = nextPixel, Counter = counter });
+                            counter++;
                         }
                         else//only from second interation
                         {
-                            if(firstPixel != originalPattern[w,h])
+                            if(nextPixel != originalPattern[w,h])
                             {
-                                allPoints.Add(new NextPoint() { ColorOfPixel = firstPixel, X = w, Y = h });
-                                firstPixel = originalPattern[w, h];
+                                allPoints.Enqueue(new NextPoint() { ColorOfPixel = nextPixel, Counter = counter });
+                                counter = 1;
+                                nextPixel = originalPattern[w, h];
+                            }
+                            else
+                            {
+                                counter++;
                             }
                         }
                     }
-                    for (int h = 0; h < originalPattern.GetLength(1); h++)
+                    bool coundition = true;
+                    for (int filler = 0; coundition ;filler++)
                     {
-                        //заполнить allSizes теми же пикселями что и в allPoints, но только в пропорциях (для allSizes[i])
-                        if (fromBegin == true)
+                        if(filler < (int)(allPoints.Peek().Counter * sizes[i]))
                         {
-                            allSizes[i][w, h] = allPoints.First().ColorOfPixel;
-
+                            allSizes[i][w, filler] = allPoints.Peek().ColorOfPixel;
                         }
+                        else
+                        {
+                            try
+                            {
+                                allPoints.Dequeue();
+                            }
+                            catch (Exception ex)
+                            {
+                                coundition = false;
+                            }
+                        }
+                        //заполнить allSizes теми же пикселями что и в allPoints, но только в пропорциях (для allSizes[i])
                     }
                 }
             }
