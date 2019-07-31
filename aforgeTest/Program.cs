@@ -60,16 +60,13 @@ namespace aforgeTest
                 {
                     for (int h = 0; h < originalPattern.GetLength(1); h++)
                     {
-                        //считываем одну линию (вертикаль) - высчитываем проценты сколько % черный и белый.
-                        //нужно сделать тоже и для горизонтали
                         if (firstIteration == true)
                         {
                             firstIteration = false;
                             nextPixel = originalPattern[w, h];
-                            //allPoints.Enqueue(new NextPoint() { ColorOfPixel = nextPixel, Counter = counter });
                             counter++;
                         }
-                        else//only from second interation
+                        else
                         {
                             if(nextPixel != originalPattern[w,h])
                             {
