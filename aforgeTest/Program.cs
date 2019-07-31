@@ -55,7 +55,6 @@ namespace aforgeTest
                 int nextPixel = 0;
                 int counter = 0;
 
-                bool fromBegin = true;
                 //increase
                 for (int w = 0; w < originalPattern.GetLength(0); w++)
                 {
@@ -96,14 +95,16 @@ namespace aforgeTest
                             try
                             {
                                 allPoints.Dequeue();
+                                allPoints.Peek();
                             }
-                            catch (Exception ex)
+                            catch (InvalidOperationException ex)
                             {
                                 coundition = false;
                             }
                         }
                         //заполнить allSizes теми же пикселями что и в allPoints, но только в пропорциях (для allSizes[i])
                     }
+                    firstIteration = true;
                 }
             }
             //move pattern square inside image square
