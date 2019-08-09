@@ -17,7 +17,7 @@ namespace aforgeTest
     {
         private static void Main(string[] args)
         {
-            Bitmap image = (Bitmap)Bitmap.FromFile(@"C:\Users\Slava\Downloads\garage1.jpg");
+            Bitmap image = (Bitmap)Bitmap.FromFile(@"C:\Users\Slava\Downloads\garage2.jpg");
             // create grayscale filter (BT709)
             Grayscale grayscale = new Grayscale(0.2125, 0.7154, 0.0721);
             SISThreshold sISThreshold = new SISThreshold();
@@ -37,65 +37,67 @@ namespace aforgeTest
                 Graphics graphics = Graphics.FromImage(btm);
                 graphics.DrawImage(pattern, 0, 0, btm.Width, btm.Height);
                 graphics.Dispose();
-                btm.Save($"{sizes[i].ToString()}.png", ImageFormat.Png);
+                //btm.Save($"{sizes[i].ToString()}.png", ImageFormat.Png);
             }
 
-
-
-            int currentAssesment = 0;
-            int bestAssesment = 0;
-            int bestStartX = 0;
-            int bestStartY = 0;
-            int inc = 10;
-           
-            //move pattern square inside image square
-            for (int i = 0; i < 2; i++)
+            for (int currsize = 0; currsize < sizes.Length; currsize++)
             {
-                int borderByWidth = bitmapImage.Width - pattern.Width;
-                int borderByHeight = bitmapImage.Height - pattern.Height;
+                Console.WriteLine($"{sizes[currsize]}");
+                int currentAssesment = 0;
+                int bestAssesment = 0;
+                int bestStartX = 0;
+                int bestStartY = 0;
+                int inc = 10;
 
-                if (i == 1)
+                //move pattern square inside image square
+                for (int i = 0; i < 2; i++)
                 {
-                    inc = 1;
-                    borderByWidth = (bestStartX + 10) > borderByWidth ? borderByWidth : (bestStartX + 10);
-                    borderByHeight = (bestStartY + 10) > borderByHeight ? borderByHeight : (bestStartY + 10);
-                }
+                    int borderByWidth = bitmapImage.Width - patternSizes[currsize].Width;
+                    int borderByHeight = bitmapImage.Height - patternSizes[currsize].Height;
 
-                for (int startX = (i == 0) ? 0 : ((bestStartX - 10) < 0 ? 0 : (bestStartX - 10)); startX < borderByWidth; startX+=inc)
-                {
-                    for (int startY = (i == 0) ? 0 : ((bestStartY - 10) < 0 ? 0 : (bestStartY - 10)); startY < borderByHeight; startY+=inc)
+                    if (i == 1)
                     {
-                        for (int w = 0; w < pattern.Width; w++)
-                        {
-                            for (int h = 0; h < pattern.Height; h++)
-                            {
-                                int bitmapPixel = bitmapImage.GetPixel(w + startX, h + startY).ToArgb();
-                                int patternPixel = pattern.GetPixel(w, h).ToArgb();
-
-                                if (bitmapPixel == patternPixel)
-                                {
-                                    currentAssesment++;
-                                }
-                                //only this values
-                                //if (r != -1 && r != -16777216)
-                                //{
-                                //    System.Console.WriteLine(x);
-                                //}
-                            }
-                        }
-
-                        if (bestAssesment < currentAssesment)
-                        {
-                            bestAssesment = currentAssesment;
-                            bestStartX = startX;
-                            bestStartY = startY;
-                        }
-                        currentAssesment = 0;
+                        inc = 1;
+                        borderByWidth = (bestStartX + 10) > borderByWidth ? borderByWidth : (bestStartX + 10);
+                        borderByHeight = (bestStartY + 10) > borderByHeight ? borderByHeight : (bestStartY + 10);
                     }
-                    System.Console.Write($"{startX}");
+
+                    for (int startX = (i == 0) ? 0 : ((bestStartX - 10) < 0 ? 0 : (bestStartX - 10)); startX < borderByWidth; startX += inc)
+                    {
+                        for (int startY = (i == 0) ? 0 : ((bestStartY - 10) < 0 ? 0 : (bestStartY - 10)); startY < borderByHeight; startY += inc)
+                        {
+                            for (int w = 0; w < patternSizes[currsize].Width; w++)
+                            {
+                                for (int h = 0; h < patternSizes[currsize].Height; h++)
+                                {
+                                    int bitmapPixel = bitmapImage.GetPixel(w + startX, h + startY).ToArgb();
+                                    int patternPixel = patternSizes[currsize].GetPixel(w, h).ToArgb();
+
+                                    if (bitmapPixel == patternPixel)
+                                    {
+                                        currentAssesment++;
+                                    }
+                                    //only this values
+                                    //if (r != -1 && r != -16777216)
+                                    //{
+                                    //    System.Console.WriteLine(x);
+                                    //}
+                                }
+                            }
+
+                            if (bestAssesment < currentAssesment)
+                            {
+                                bestAssesment = currentAssesment;
+                                bestStartX = startX;
+                                bestStartY = startY;
+                            }
+                            currentAssesment = 0;
+                        }
+                        System.Console.Write($"{startX}");
+                    }
+                    System.Console.WriteLine($"done. best assesmet: {bestAssesment}, X: {bestStartX}, Y: {bestStartY}");
                 }
-                System.Console.WriteLine($"done. best assesmet: {bestAssesment}, X: {bestStartX}, Y: {bestStartY}");
             }
         }
-    }  
+    }
 }
