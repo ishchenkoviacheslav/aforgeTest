@@ -36,7 +36,8 @@ namespace aforgeTest
                 patternSizes.Add(btm);
                 Graphics graphics = Graphics.FromImage(btm);
                 graphics.DrawImage(pattern, 0, 0, btm.Width, btm.Height);
-                //pattern05.Save("05.png", ImageFormat.Png);
+                graphics.Dispose();
+                btm.Save($"{sizes[i].ToString()}.png", ImageFormat.Png);
             }
 
 
