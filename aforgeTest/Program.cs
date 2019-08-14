@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
 
 namespace aforgeTest
 {
@@ -17,7 +14,7 @@ namespace aforgeTest
     {
         private static void Main(string[] args)
         {
-            Bitmap image = (Bitmap)Bitmap.FromFile(@"C:\Users\Slava\Downloads\garage2.jpg");
+            Bitmap image = (Bitmap)Bitmap.FromFile(@"C:\Users\Slava\Downloads\garage1.jpg");
             // create grayscale filter (BT709)
             Grayscale grayscale = new Grayscale(0.2125, 0.7154, 0.0721);
             SISThreshold sISThreshold = new SISThreshold();
@@ -49,6 +46,7 @@ namespace aforgeTest
                 int bestStartY = 0;
                 int inc = 10;
 
+                int onePercent = (patternSizes[currsize].Width * patternSizes[currsize].Height) / 100;
                 //move pattern square inside image square
                 for (int i = 0; i < 2; i++)
                 {
@@ -95,7 +93,7 @@ namespace aforgeTest
                         }
                         System.Console.Write($"{startX}");
                     }
-                    System.Console.WriteLine($"done. best assesmet: {bestAssesment}, X: {bestStartX}, Y: {bestStartY}");
+                    System.Console.WriteLine($"done. best assesmet: {(bestAssesment / onePercent)}, X: {bestStartX}, Y: {bestStartY}");
                 }
             }
         }
